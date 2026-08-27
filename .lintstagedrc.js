@@ -1,7 +1,7 @@
 const quote = (file) => `"${file.replaceAll('"', '\\"')}"`;
 
 export default {
-  '*.{css}': ['stylelint --fix --cache', 'prettier --write --cache'],
+  '*.css': ['stylelint --fix --cache', 'prettier --write --cache'],
   '*.{md,json,yml,yaml}': 'prettier --write --cache',
   '*.{ts,tsx}': (files) => [
     'tsc -b --pretty',

@@ -11,6 +11,10 @@
 5. Отказ: сумма `0`, отрицательная, пустая, дабл-клик по сабмиту.
 6. Записать отчёт в `reports/ui-check.md`: что проверено, что сломалось, что осталось.
 
+## Скиллы
+
+Глобальный (для всех воркфлоу): `.cursor/skills/react-performance-optimization/SKILL.md`.
+
 ## Вызов
 
 «Прогони workflow из workflows/ui-check.md и сохрани отчёт в reports/ui-check.md.»

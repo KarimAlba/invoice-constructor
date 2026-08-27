@@ -1,0 +1,23 @@
+---
+alwaysApply: true
+description: GitLens MCP и изолированные git worktrees для агентов
+---
+
+# Git MCP и worktrees
+
+Локальный Git в этом репозитории — через MCP GitLens (GitKraken): `git_status`, `git_worktree`, `git_branch`, `git_log_or_diff`. Не дублируй `git worktree` в shell, если MCP доступен.
+
+## Изоляция
+
+Правки, которые не должны трогать основной checkout (`main`), делай в отдельном worktree:
+
+1. `git_worktree` action `list` из корня репозитория.
+2. Если нужной копии нет — `git_branch` create, затем `git_checkout` обратно на `main` (create у GitLens переключает ветку), затем `git_worktree` add с `path` **вне** основного каталога и `branch`.
+3. Дальше работай с `directory` = путь worktree.
+4. Основной checkout не коммить и не checkout-ай под чужую ветку ради этой задачи.
+
+Настройка при создании worktree Cursor/Agents Window: `.cursor/worktrees.json` (`npm ci`).
+
+Ручной сценарий: `workflows/worktree-isolation.md`.
+
+PR/issues через GitLens нужны после входа в GitKraken. Локальные worktree работают без этого входа.

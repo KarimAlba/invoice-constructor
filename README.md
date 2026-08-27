@@ -24,4 +24,4 @@ npm run dev
 
 ## Workflow
 
-Повторяемая проверка UI: [`workflows/ui-check.md`](workflows/ui-check.md).
+Повторяемая проверка UI: [`workflows/ui-check.md`](workflows/ui-check.md). Журнал сессий: [`reports/sessions.md`](reports/sessions.md). План усиления: [`reports/hardening-plan.md`](reports/hardening-plan.md).
