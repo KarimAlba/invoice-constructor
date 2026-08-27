@@ -41,6 +41,6 @@ GitKraken-аккаунт для PR/issues в MCP не логинился — д�
 
 План усиления: [`reports/hardening-plan.md`](reports/hardening-plan.md).
 
-P0/P1 закрыты: журнал, хуки на `pages/**/ui`, tsc/stylelint после правок `src/`, напоминание журнала на `sessionStart`.
+P0–P2 закрыты: журнал, хуки, `entities/invoice`, Vitest/RTL (`npm test`), таймер списка без ререндера формы.
 
-Дальше — P2 (тесты, FSD). Постоянный Playwright, агент-ломатель, инъекции — плюсы (P3).
+Дальше — P3 по желанию: Playwright в репозитории, агент-ломатель, инъекции.

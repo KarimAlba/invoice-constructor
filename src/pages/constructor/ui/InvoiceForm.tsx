@@ -1,7 +1,6 @@
 import { type FormEvent, useMemo, useState } from 'react';
 
-import { createInvoice } from '../model/repository';
-import { CURRENCIES, type Currency, TTL_OPTIONS } from '../model/types';
+import { createInvoice, CURRENCIES, type Currency, TTL_OPTIONS } from '../../../entities/invoice';
 import styles from './constructor.module.css';
 
 type InvoiceFormProps = {

@@ -1,13 +1,15 @@
-import { type Invoice, type InvoiceStatus, STATUSES } from '../model/types';
+import { memo, useEffect, useMemo, useState } from 'react';
+
+import { type Invoice, type InvoiceStatus, STATUSES } from '../../../entities/invoice';
 import styles from './constructor.module.css';
 import { InvoiceCard } from './InvoiceCard';
 
 type InvoiceListProps = {
   items: Invoice[];
   filter: InvoiceStatus | 'all';
-  now: number;
   onFilter: (value: InvoiceStatus | 'all') => void;
   onChange: () => void;
+  onTick: () => void;
 };
 
 const FILTERS: Array<InvoiceStatus | 'all'> = ['all', ...STATUSES];
@@ -25,8 +27,21 @@ function filterLabel(value: InvoiceStatus | 'all'): string {
   return 'истекли';
 }
 
-export function InvoiceList({ items, filter, now, onFilter, onChange }: InvoiceListProps) {
-  const visible = items.filter((item) => filter === 'all' || item.status === filter);
+function InvoiceListComponent({ items, filter, onFilter, onChange, onTick }: InvoiceListProps) {
+  const [now, setNow] = useState(() => Date.now());
+  const visible = useMemo(
+    () => items.filter((item) => filter === 'all' || item.status === filter),
+    [filter, items],
+  );
+
+  useEffect(() => {
+    const timer = window.setInterval(() => {
+      setNow(Date.now());
+      onTick();
+    }, 1000);
+
+    return () => window.clearInterval(timer);
+  }, [onTick]);
 
   return (
     <section className={styles.list}>
@@ -59,3 +74,5 @@ export function InvoiceList({ items, filter, now, onFilter, onChange }: InvoiceL
     </section>
   );
 }
+
+export const InvoiceList = memo(InvoiceListComponent);

@@ -91,3 +91,15 @@
   - Обновлены `hooks.json`, журнал и план.
 - **Решение:** не блокировать агента (`exit 0`); путь `src/components` из исходного задания не существует — матч по `src/`.
 - **Дальше:** P2 — Vitest/RTL и вынос `entities/invoice` в worktree.
+
+## 9. P2: FSD, тесты, ререндеры
+
+- **Когда:** 14:51
+- **Чат:** этот (продолжение: «давай p2»)
+- **Цель:** закрыть P2 в worktree `hw2-isolation`.
+- **Сделано:**
+  - `src/entities/invoice` (types, repository, format, status, validate); страница только композиция UI.
+  - Vitest + RTL + happy-dom, 14 тестов, скрипт `npm test`.
+  - Таймер перенесён в список: форма не тикает каждую секунду; карточки в `memo`, `now` игнорируется для paid/expired; cleanup таймера копирования.
+- **Решение:** `fsd/insignificant-slice` выключен только для entities — одностраничное приложение. `useCallback` в `ConstructorPage` убран: React Compiler + `preserve-manual-memoization`.
+- **Дальше:** P3 по желанию.

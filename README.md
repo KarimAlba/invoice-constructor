@@ -11,7 +11,7 @@ npm install
 npm run dev
 ```
 
-Сборка: `npm run build`. Превью: `npm run preview`.
+Сборка: `npm run build`. Превью: `npm run preview`. Тесты: `npm test`.
 
 ## Как пользоваться
 

@@ -1,6 +1,11 @@
-import { formatAmount, statusLabel } from '../lib/format';
-import { markInvoicePaid } from '../model/repository';
-import type { Invoice } from '../model/types';
+import { memo } from 'react';
+
+import {
+  formatAmount,
+  type Invoice,
+  markInvoicePaid,
+  statusLabel,
+} from '../../../entities/invoice';
 import styles from './constructor.module.css';
 
 type PayViewProps = {
@@ -8,7 +13,7 @@ type PayViewProps = {
   onPaid: () => void;
 };
 
-export function PayView({ invoice, onPaid }: PayViewProps) {
+function PayViewComponent({ invoice, onPaid }: PayViewProps) {
   if (!invoice) {
     return (
       <main className={styles.pay}>
@@ -46,3 +51,5 @@ export function PayView({ invoice, onPaid }: PayViewProps) {
     </main>
   );
 }
+
+export const PayView = memo(PayViewComponent);

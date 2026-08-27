@@ -12,6 +12,8 @@ export default defineConfig([
     files: ['./src/entities/**'],
     rules: {
       'fsd/no-cross-imports': 'off',
+      // One page consumes the invoice entity; extra slices would exist only to satisfy this rule.
+      'fsd/insignificant-slice': 'off',
     },
   },
 ]);

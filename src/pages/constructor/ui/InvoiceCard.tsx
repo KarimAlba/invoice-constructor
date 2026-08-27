@@ -1,8 +1,13 @@
-import { useState } from 'react';
+import { memo, useEffect, useState } from 'react';
 
-import { formatAmount, formatCountdown, paymentUrl, statusLabel } from '../lib/format';
-import { markInvoicePaid } from '../model/repository';
-import type { Invoice } from '../model/types';
+import {
+  formatAmount,
+  formatCountdown,
+  type Invoice,
+  markInvoicePaid,
+  paymentUrl,
+  statusLabel,
+} from '../../../entities/invoice';
 import styles from './constructor.module.css';
 
 type InvoiceCardProps = {
@@ -11,16 +16,28 @@ type InvoiceCardProps = {
   onChange: () => void;
 };
 
-export function InvoiceCard({ invoice, now, onChange }: InvoiceCardProps) {
+function InvoiceCardComponent({ invoice, now, onChange }: InvoiceCardProps) {
   const [copied, setCopied] = useState(false);
   const [actionError, setActionError] = useState<string | null>(null);
   const link = paymentUrl(invoice.id);
+
+  useEffect(() => {
+    if (!copied) {
+      return;
+    }
+
+    const timer = window.setTimeout(() => {
+      setCopied(false);
+    }, 1600);
+
+    return () => window.clearTimeout(timer);
+  }, [copied]);
 
   async function copyLink() {
     try {
       await navigator.clipboard.writeText(link);
       setCopied(true);
-      window.setTimeout(() => setCopied(false), 1600);
+      setActionError(null);
     } catch {
       setActionError('Не удалось скопировать ссылку');
     }
@@ -78,3 +95,31 @@ export function InvoiceCard({ invoice, now, onChange }: InvoiceCardProps) {
     </article>
   );
 }
+
+function areCardPropsEqual(previous: InvoiceCardProps, next: InvoiceCardProps) {
+  if (previous.onChange !== next.onChange) {
+    return false;
+  }
+
+  const prevInvoice = previous.invoice;
+  const nextInvoice = next.invoice;
+
+  if (
+    prevInvoice.id !== nextInvoice.id ||
+    prevInvoice.status !== nextInvoice.status ||
+    prevInvoice.amount !== nextInvoice.amount ||
+    prevInvoice.currency !== nextInvoice.currency ||
+    prevInvoice.description !== nextInvoice.description ||
+    prevInvoice.expiresAt !== nextInvoice.expiresAt
+  ) {
+    return false;
+  }
+
+  if (nextInvoice.status !== 'pending') {
+    return true;
+  }
+
+  return previous.now === next.now;
+}
+
+export const InvoiceCard = memo(InvoiceCardComponent, areCardPropsEqual);

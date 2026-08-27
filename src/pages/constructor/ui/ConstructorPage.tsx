@@ -1,7 +1,11 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useState } from 'react';
 
-import { getInvoice, listInvoices } from '../model/repository';
-import type { Invoice, InvoiceStatus } from '../model/types';
+import {
+  getInvoice,
+  type Invoice,
+  type InvoiceStatus,
+  listInvoices,
+} from '../../../entities/invoice';
 import styles from './constructor.module.css';
 import { InvoiceForm } from './InvoiceForm';
 import { InvoiceList } from './InvoiceList';
@@ -11,10 +15,25 @@ function payIdFromUrl(): string | null {
   return new URLSearchParams(window.location.search).get('pay');
 }
 
+function sameSnapshot(previous: Invoice[], next: Invoice[]): boolean {
+  if (previous.length !== next.length) {
+    return false;
+  }
+
+  return previous.every((item, index) => {
+    const candidate = next[index];
+    return (
+      item.id === candidate.id &&
+      item.status === candidate.status &&
+      item.paidAt === candidate.paidAt &&
+      item.expiresAt === candidate.expiresAt
+    );
+  });
+}
+
 export function ConstructorPage() {
   const [items, setItems] = useState<Invoice[]>(() => listInvoices());
   const [filter, setFilter] = useState<InvoiceStatus | 'all'>('all');
-  const [now, setNow] = useState(() => Date.now());
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const payId = payIdFromUrl();
 
@@ -22,23 +41,24 @@ export function ConstructorPage() {
     setItems(listInvoices());
   }
 
-  useEffect(() => {
-    const timer = window.setInterval(() => {
-      setNow(Date.now());
-      setItems(listInvoices());
-    }, 1000);
+  function handleTick() {
+    setItems((previous) => {
+      const next = listInvoices();
+      return sameSnapshot(previous, next) ? previous : next;
+    });
+  }
 
-    return () => window.clearInterval(timer);
-  }, []);
-
-  const selected = useMemo(
-    () => items.find((item) => item.id === selectedId) ?? items[0] ?? null,
-    [items, selectedId],
-  );
+  function handleCreated(id: string) {
+    setItems(listInvoices());
+    setSelectedId(id);
+    setFilter('all');
+  }
 
   if (payId) {
     return <PayView invoice={getInvoice(payId)} onPaid={refresh} />;
   }
+
+  const selected = items.find((item) => item.id === selectedId) ?? items[0] ?? null;
 
   return (
     <div className={styles.page}>
@@ -48,13 +68,7 @@ export function ConstructorPage() {
         <p>Один экран: выставить счёт, получить ссылку, следить за статусом.</p>
       </header>
       <div className={styles.layout}>
-        <InvoiceForm
-          onCreated={(id) => {
-            refresh();
-            setSelectedId(id);
-            setFilter('all');
-          }}
-        />
+        <InvoiceForm onCreated={handleCreated} />
         <div className={styles.side}>
           {selected ? (
             <p className={styles.hint}>
@@ -64,9 +78,9 @@ export function ConstructorPage() {
           <InvoiceList
             items={items}
             filter={filter}
-            now={now}
             onFilter={setFilter}
             onChange={refresh}
+            onTick={handleTick}
           />
         </div>
       </div>
