@@ -58,6 +58,30 @@ test.describe('UI check — конструктор инвойса', () => {
     await expect(constructor.qrCodes()).toHaveCount(0);
   });
 
+  test('оплата из карточки обновляет статус и хранилище', async ({ page }) => {
+    const constructor = new ConstructorPage(page);
+
+    // Arrange
+    await constructor.goto();
+    await constructor.fillAmount('25');
+    await constructor.submitInvoice();
+    await constructor.expectPendingCard();
+
+    // Act
+    await constructor.markPaidButton().click();
+
+    // Assert
+    await expect(page.locator('[data-status="paid"]')).toBeVisible();
+    await expect(constructor.markPaidButton()).toHaveCount(0);
+    const statuses = await page.evaluate((key) => {
+      const raw = localStorage.getItem(key);
+      return raw
+        ? (JSON.parse(raw) as Array<{ status: string }>).map((invoice) => invoice.status)
+        : [];
+    }, STORAGE_KEY);
+    expect(statuses).toEqual(['paid']);
+  });
+
   test('PayView expired без кнопки оплаты', async ({ page }) => {
     const constructor = new ConstructorPage(page);
 

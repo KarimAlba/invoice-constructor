@@ -11,9 +11,22 @@ test.describe('Agent breaker — отказы', () => {
     const constructor = new ConstructorPage(page);
 
     await constructor.goto();
-    await constructor.fillAmount('abc');
+    for (const amount of ['abc', '1.2.3']) {
+      await constructor.fillAmount(amount);
+      await constructor.submitInvoice();
+      await constructor.expectValidationAlert('числом');
+    }
+  });
+
+  test('F5: очень большая сумма не ломает интерфейс', async ({ page }) => {
+    const constructor = new ConstructorPage(page);
+
+    await constructor.goto();
+    await constructor.fillAmount('999999999999');
     await constructor.submitInvoice();
-    await constructor.expectValidationAlert('числом');
+
+    await constructor.expectPendingCard();
+    await expect(page.getByText('999 999 999 999,00 USDT')).toBeVisible();
   });
 
   test('F7: XSS в описании не выполняется', async ({ page }) => {
@@ -67,6 +80,43 @@ test.describe('Agent breaker — отказы', () => {
     await page.goto('/?pay=paid-breaker', { waitUntil: 'networkidle' });
 
     await expect(page.getByText('Счёт уже оплачен')).toBeVisible();
+    await expect(page.getByRole('button', { name: 'Оплатить (демо)' })).toHaveCount(0);
+  });
+
+  test('P5: PayView подхватывает изменённый expiresAt', async ({ page }) => {
+    const constructor = new ConstructorPage(page);
+    const now = Date.now();
+
+    await constructor.goto();
+    await constructor.seedInvoice({
+      id: 'tampered-expiry',
+      amount: '15',
+      currency: 'USDT',
+      description: 'expiresAt tampering',
+      createdAt: now,
+      expiresAt: now + 3_600_000,
+      status: 'pending',
+      paidAt: null,
+      requestKey: 'tampered-expiry-key',
+    });
+    await page.goto('/?pay=tampered-expiry', { waitUntil: 'networkidle' });
+    await expect(page.getByRole('button', { name: 'Оплатить (демо)' })).toBeVisible();
+
+    await page.evaluate((key) => {
+      const raw = localStorage.getItem(key);
+      const invoices = raw ? (JSON.parse(raw) as Array<Record<string, unknown>>) : [];
+      localStorage.setItem(
+        key,
+        JSON.stringify(
+          invoices.map((invoice) => ({
+            ...invoice,
+            expiresAt: Date.now() - 1000,
+          })),
+        ),
+      );
+    }, STORAGE_KEY);
+
+    await expect(page.getByText('Срок оплаты истёк')).toBeVisible();
     await expect(page.getByRole('button', { name: 'Оплатить (демо)' })).toHaveCount(0);
   });
 

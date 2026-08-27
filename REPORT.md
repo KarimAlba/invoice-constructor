@@ -36,7 +36,7 @@ UI-check делал отдельный агент (не автор кода), п
 
 Файл: `workflows/ui-check.md`. Прогон: `reports/ui-check.md`.
 
-14/14 сценариев ok: пустой список, валидация (0 / отрицательная / пустая сумма), дабл-клик, pending / paid / expired, фильтр списка, happy path (создать → ссылка → `?pay=` → оплата). Браузерных MCP не было — проверка через Playwright Chromium (headless), без добавления Playwright в `package.json`.
+В первом ручном прогоне 14/14 сценариев были ok: пустой список, валидация (0 / отрицательная / пустая сумма), дабл-клик, pending / paid / expired, фильтр списка, happy path (создать → ссылка → `?pay=` → оплата). Браузерных MCP не было — проверка шла через временный Playwright Chromium (headless). Позже в P3 Playwright добавлен в проект для воспроизводимого запуска.
 
 ## 4. Worktrees и Git MCP
 
@@ -60,8 +60,10 @@ P0–P2 закрыты: журнал, хуки, `entities/invoice`, Vitest/RTL (
 
 **Добавлено 2026-08-27 (сессия 15, P3):**
 
-- Playwright в репозитории: `npm run test:e2e` (12 сценариев, POM в `e2e/pages/`), Vite слушает `127.0.0.1:5173`.
+- Playwright в репозитории: `npm run test:e2e` (15 тестов / 16 пунктов чеклиста, POM в `e2e/pages/`), Vite слушает `127.0.0.1:5173`.
 - Workflow агент-ломатель: [`workflows/breaker.md`](workflows/breaker.md) → [`reports/breaker.md`](reports/breaker.md) (0 blocker).
 - Инъекции: `beforeSubmitPrompt` (`.cursor/hooks/inject-guardrails.cjs`) + правило `.cursor/rules/agent-guardrails.mdc`.
+
+**Финальный аудит 2026-08-27:** добавлены отсутствовавшие проверки F5, P5 и оплаты из карточки; устранена гонка ESLint с каталогом `test-results` при параллельном запуске Playwright. Зелёные проверки: lint/FSD/TypeScript, 19 unit-тестов, 15 e2e и production-сборка.
 
 Дальше — по желанию: «Выставить снова» для expired.

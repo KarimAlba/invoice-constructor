@@ -43,6 +43,10 @@ export class ConstructorPage {
     return this.page.getByRole('tab', { name });
   }
 
+  markPaidButton() {
+    return this.page.getByRole('button', { name: 'Отметить оплаченным' });
+  }
+
   async seedInvoice(item: Record<string, unknown>) {
     await this.page.evaluate(
       ({ key, invoice }) => {
@@ -66,9 +70,5 @@ export class PayViewPage {
 
   payDemoButton() {
     return this.page.getByRole('button', { name: 'Оплатить (демо)' });
-  }
-
-  markPaidButton() {
-    return this.page.getByRole('button', { name: 'Отметить оплаченным' });
   }
 }
