@@ -53,10 +53,10 @@
 .pay {
   background: var(--paper);
   color: var(--ink);
-  border-radius: 4px 4px 18px 4px;
+  border-radius: 4px 4px 18px;
   box-shadow:
-    0 1px 0 rgba(255, 248, 232, 0.7) inset,
-    0 24px 50px rgba(0, 0, 0, 0.35);
+    0 1px 0 rgb(255 248 232 / 70%) inset,
+    0 24px 50px rgb(0 0 0 / 35%);
 }
 
 .form {
@@ -278,7 +278,7 @@ textarea {
   font-size: 1.15rem;
   color: var(--copper);
   transform: rotate(-8deg);
-  border: 2px solid currentColor;
+  border: 2px solid currentcolor;
   padding: 2px 10px;
 }
 
@@ -353,7 +353,7 @@ textarea {
   color: var(--copper);
 }
 
-@media (max-width: 860px) {
+@media (width <= 860px) {
   .layout {
     grid-template-columns: 1fr;
   }

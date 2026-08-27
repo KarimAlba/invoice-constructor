@@ -1,10 +1,12 @@
-import { formatAmount, markInvoicePaid, statusLabel, type Invoice } from '../../../entities/invoice'
-import styles from './constructor.module.css'
+import { formatAmount, statusLabel } from '../lib/format';
+import { markInvoicePaid } from '../model/repository';
+import type { Invoice } from '../model/types';
+import styles from './constructor.module.css';
 
 type PayViewProps = {
-  invoice: Invoice | null
-  onPaid: () => void
-}
+  invoice: Invoice | null;
+  onPaid: () => void;
+};
 
 export function PayView({ invoice, onPaid }: PayViewProps) {
   if (!invoice) {
@@ -13,16 +15,16 @@ export function PayView({ invoice, onPaid }: PayViewProps) {
         <p className={styles.empty}>Счёт не найден или ссылка повреждена.</p>
         <a href={window.location.pathname}>К конструктору</a>
       </main>
-    )
+    );
   }
 
   function pay() {
     if (!invoice) {
-      return
+      return;
     }
-    const result = markInvoicePaid(invoice.id)
+    const result = markInvoicePaid(invoice.id);
     if (!('error' in result)) {
-      onPaid()
+      onPaid();
     }
   }
 
@@ -36,11 +38,11 @@ export function PayView({ invoice, onPaid }: PayViewProps) {
         {statusLabel(invoice.status)}
       </p>
       {invoice.status === 'pending' ? (
-        <button className={styles.submit} type="button" onClick={pay}>
+        <button className={styles.submit} type='button' onClick={pay}>
           Оплатить (демо)
         </button>
       ) : null}
       <a href={window.location.pathname}>Вернуться в конструктор</a>
     </main>
-  )
+  );
 }

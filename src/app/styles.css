@@ -8,11 +8,12 @@
   --display: 'Fraunces', 'Times New Roman', serif;
   --sans: 'Outfit', 'Segoe UI', sans-serif;
   --mono: 'IBM Plex Mono', ui-monospace, monospace;
+
   font: 16px/1.45 var(--sans);
   color: var(--cream);
   background: var(--desk);
   font-synthesis: none;
-  text-rendering: optimizeLegibility;
+  text-rendering: optimizelegibility;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -30,8 +31,7 @@ body {
   margin: 0;
   background:
     radial-gradient(1200px 600px at 10% -10%, #2a2118 0%, transparent 55%),
-    radial-gradient(900px 500px at 110% 10%, #3a2416 0%, transparent 50%),
-    var(--desk);
+    radial-gradient(900px 500px at 110% 10%, #3a2416 0%, transparent 50%), var(--desk);
 }
 
 body::before {

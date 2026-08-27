@@ -1,41 +1,43 @@
-import { useEffect, useMemo, useState } from 'react'
-import { getInvoice, listInvoices, type Invoice, type InvoiceStatus } from '../../../entities/invoice'
-import { InvoiceForm } from './InvoiceForm'
-import { InvoiceList } from './InvoiceList'
-import { PayView } from './PayView'
-import styles from './constructor.module.css'
+import { useEffect, useMemo, useState } from 'react';
+
+import { getInvoice, listInvoices } from '../model/repository';
+import type { Invoice, InvoiceStatus } from '../model/types';
+import styles from './constructor.module.css';
+import { InvoiceForm } from './InvoiceForm';
+import { InvoiceList } from './InvoiceList';
+import { PayView } from './PayView';
 
 function payIdFromUrl(): string | null {
-  return new URLSearchParams(window.location.search).get('pay')
+  return new URLSearchParams(window.location.search).get('pay');
 }
 
 export function ConstructorPage() {
-  const [items, setItems] = useState<Invoice[]>(() => listInvoices())
-  const [filter, setFilter] = useState<InvoiceStatus | 'all'>('all')
-  const [now, setNow] = useState(() => Date.now())
-  const [selectedId, setSelectedId] = useState<string | null>(null)
-  const payId = payIdFromUrl()
+  const [items, setItems] = useState<Invoice[]>(() => listInvoices());
+  const [filter, setFilter] = useState<InvoiceStatus | 'all'>('all');
+  const [now, setNow] = useState(() => Date.now());
+  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const payId = payIdFromUrl();
 
   function refresh() {
-    setItems(listInvoices())
+    setItems(listInvoices());
   }
 
   useEffect(() => {
     const timer = window.setInterval(() => {
-      setNow(Date.now())
-      setItems(listInvoices())
-    }, 1000)
+      setNow(Date.now());
+      setItems(listInvoices());
+    }, 1000);
 
-    return () => window.clearInterval(timer)
-  }, [])
+    return () => window.clearInterval(timer);
+  }, []);
 
   const selected = useMemo(
     () => items.find((item) => item.id === selectedId) ?? items[0] ?? null,
     [items, selectedId],
-  )
+  );
 
   if (payId) {
-    return <PayView invoice={getInvoice(payId)} onPaid={refresh} />
+    return <PayView invoice={getInvoice(payId)} onPaid={refresh} />;
   }
 
   return (
@@ -48,9 +50,9 @@ export function ConstructorPage() {
       <div className={styles.layout}>
         <InvoiceForm
           onCreated={(id) => {
-            refresh()
-            setSelectedId(id)
-            setFilter('all')
+            refresh();
+            setSelectedId(id);
+            setFilter('all');
           }}
         />
         <div className={styles.side}>
@@ -69,5 +71,5 @@ export function ConstructorPage() {
         </div>
       </div>
     </div>
-  )
+  );
 }

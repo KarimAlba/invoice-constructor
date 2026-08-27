@@ -1,5 +1,5 @@
-import { ConstructorPage } from '../pages/constructor/ui/ConstructorPage'
+import { ConstructorPage } from '../pages/constructor';
 
 export default function App() {
-  return <ConstructorPage />
+  return <ConstructorPage />;
 }

@@ -1,43 +1,39 @@
-import { useState } from 'react'
-import {
-  formatAmount,
-  formatCountdown,
-  markInvoicePaid,
-  paymentUrl,
-  statusLabel,
-  type Invoice,
-} from '../../../entities/invoice'
-import styles from './constructor.module.css'
+import { useState } from 'react';
+
+import { formatAmount, formatCountdown, paymentUrl, statusLabel } from '../lib/format';
+import { markInvoicePaid } from '../model/repository';
+import type { Invoice } from '../model/types';
+import styles from './constructor.module.css';
 
 type InvoiceCardProps = {
-  invoice: Invoice
-  now: number
-  onChange: () => void
-}
+  invoice: Invoice;
+  now: number;
+  onChange: () => void;
+};
 
 export function InvoiceCard({ invoice, now, onChange }: InvoiceCardProps) {
-  const [copied, setCopied] = useState(false)
-  const [actionError, setActionError] = useState<string | null>(null)
-  const link = paymentUrl(invoice.id)
+  const [copied, setCopied] = useState(false);
+  const [actionError, setActionError] = useState<string | null>(null);
+  const link = paymentUrl(invoice.id);
 
   async function copyLink() {
     try {
-      await navigator.clipboard.writeText(link)
-      setCopied(true)
-      window.setTimeout(() => setCopied(false), 1600)
+      await navigator.clipboard.writeText(link);
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 1600);
     } catch {
-      setActionError('Не удалось скопировать ссылку')
+      setActionError('Не удалось скопировать ссылку');
     }
   }
 
   function pay() {
-    const result = markInvoicePaid(invoice.id)
+    const result = markInvoicePaid(invoice.id);
     if ('error' in result) {
-      setActionError(result.error)
-      return
+      setActionError(result.error);
+      return;
     }
-    setActionError(null)
-    onChange()
+    setActionError(null);
+    onChange();
   }
 
   return (
@@ -65,20 +61,20 @@ export function InvoiceCard({ invoice, now, onChange }: InvoiceCardProps) {
         </div>
       </dl>
       <div className={styles.receiptActions}>
-        <button type="button" onClick={() => void copyLink()}>
+        <button type='button' onClick={() => void copyLink()}>
           {copied ? 'Скопировано' : 'Копировать ссылку'}
         </button>
         {invoice.status === 'pending' ? (
-          <button type="button" className={styles.ghost} onClick={pay}>
+          <button type='button' className={styles.ghost} onClick={pay}>
             Отметить оплаченным
           </button>
         ) : null}
       </div>
       {actionError ? (
-        <p className={styles.error} role="alert">
+        <p className={styles.error} role='alert'>
           {actionError}
         </p>
       ) : null}
     </article>
-  )
+  );
 }

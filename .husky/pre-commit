@@ -1,0 +1,8 @@
+REBASE_PATH="$(git rev-parse --git-path rebase-merge)"
+MERGE_PATH="$(git rev-parse --git-path MERGE_HEAD)"
+
+if [ -d "$REBASE_PATH" ] || [ -f "$MERGE_PATH" ]; then
+  echo "Skipping pre-commit checks during rebase or merge."
+else
+  npm run pre-commit-lint
+fi

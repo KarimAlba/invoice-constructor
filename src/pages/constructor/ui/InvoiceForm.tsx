@@ -1,67 +1,64 @@
-import { useMemo, useState, type FormEvent } from 'react'
-import {
-  createInvoice,
-  CURRENCIES,
-  TTL_OPTIONS,
-  type Currency,
-} from '../../../entities/invoice'
-import styles from './constructor.module.css'
+import { type FormEvent, useMemo, useState } from 'react';
+
+import { createInvoice } from '../model/repository';
+import { CURRENCIES, type Currency, TTL_OPTIONS } from '../model/types';
+import styles from './constructor.module.css';
 
 type InvoiceFormProps = {
-  onCreated: (id: string) => void
-}
+  onCreated: (id: string) => void;
+};
 
 function nextRequestKey(): string {
   if (typeof crypto !== 'undefined' && 'randomUUID' in crypto) {
-    return crypto.randomUUID()
+    return crypto.randomUUID();
   }
 
-  return `req-${Date.now()}-${Math.random().toString(36).slice(2)}`
+  return `req-${Date.now()}-${Math.random().toString(36).slice(2)}`;
 }
 
 export function InvoiceForm({ onCreated }: InvoiceFormProps) {
-  const [amount, setAmount] = useState('')
-  const [currency, setCurrency] = useState<Currency>('USDT')
-  const [description, setDescription] = useState('')
-  const [ttlMinutes, setTtlMinutes] = useState(60)
-  const [error, setError] = useState<string | null>(null)
-  const [busy, setBusy] = useState(false)
-  const [requestKey, setRequestKey] = useState(nextRequestKey)
+  const [amount, setAmount] = useState('');
+  const [currency, setCurrency] = useState<Currency>('USDT');
+  const [description, setDescription] = useState('');
+  const [ttlMinutes, setTtlMinutes] = useState(60);
+  const [error, setError] = useState<string | null>(null);
+  const [busy, setBusy] = useState(false);
+  const [requestKey, setRequestKey] = useState(nextRequestKey);
 
-  const canSubmit = useMemo(() => amount.trim().length > 0 && !busy, [amount, busy])
+  const canSubmit = useMemo(() => amount.trim().length > 0 && !busy, [amount, busy]);
 
   function clearError() {
     if (error) {
-      setError(null)
+      setError(null);
     }
   }
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault()
+    event.preventDefault();
     if (busy) {
-      return
+      return;
     }
 
-    setBusy(true)
+    setBusy(true);
     const result = createInvoice({
       amount,
       currency,
       description,
       ttlMinutes,
       requestKey,
-    })
+    });
 
     if ('error' in result) {
-      setError(result.error)
-      setBusy(false)
-      return
+      setError(result.error);
+      setBusy(false);
+      return;
     }
 
-    setAmount('')
-    setDescription('')
-    setRequestKey(nextRequestKey())
-    setBusy(false)
-    onCreated(result.id)
+    setAmount('');
+    setDescription('');
+    setRequestKey(nextRequestKey());
+    setBusy(false);
+    onCreated(result.id);
   }
 
   return (
@@ -78,23 +75,23 @@ export function InvoiceForm({ onCreated }: InvoiceFormProps) {
         <span>Сумма</span>
         <div className={styles.amountRow}>
           <input
-            inputMode="decimal"
-            autoComplete="off"
-            name="amount"
-            placeholder="0.00"
+            inputMode='decimal'
+            autoComplete='off'
+            name='amount'
+            placeholder='0.00'
             value={amount}
             onChange={(event) => {
-              clearError()
-              setAmount(event.target.value)
+              clearError();
+              setAmount(event.target.value);
             }}
             aria-invalid={Boolean(error)}
           />
           <select
-            name="currency"
+            name='currency'
             value={currency}
             onChange={(event) => {
-              clearError()
-              setCurrency(event.target.value as Currency)
+              clearError();
+              setCurrency(event.target.value as Currency);
             }}
           >
             {CURRENCIES.map((item) => (
@@ -109,14 +106,14 @@ export function InvoiceForm({ onCreated }: InvoiceFormProps) {
       <label className={styles.field}>
         <span>Описание</span>
         <textarea
-          name="description"
+          name='description'
           rows={3}
           maxLength={280}
-          placeholder="Оплата по договору, заказ #1042"
+          placeholder='Оплата по договору, заказ #1042'
           value={description}
           onChange={(event) => {
-            clearError()
-            setDescription(event.target.value)
+            clearError();
+            setDescription(event.target.value);
           }}
         />
         <em>{description.length}/280</em>
@@ -128,12 +125,12 @@ export function InvoiceForm({ onCreated }: InvoiceFormProps) {
           {TTL_OPTIONS.map((option) => (
             <label key={option.minutes} className={styles.chip}>
               <input
-                type="radio"
-                name="ttl"
+                type='radio'
+                name='ttl'
                 checked={ttlMinutes === option.minutes}
                 onChange={() => {
-                  clearError()
-                  setTtlMinutes(option.minutes)
+                  clearError();
+                  setTtlMinutes(option.minutes);
                 }}
               />
               {option.label}
@@ -143,14 +140,14 @@ export function InvoiceForm({ onCreated }: InvoiceFormProps) {
       </fieldset>
 
       {error ? (
-        <p className={styles.error} role="alert">
+        <p className={styles.error} role='alert'>
           {error}
         </p>
       ) : null}
 
-      <button className={styles.submit} type="submit" disabled={!canSubmit}>
+      <button className={styles.submit} type='submit' disabled={!canSubmit}>
         {busy ? 'Создаём…' : 'Выставить счёт'}
       </button>
     </form>
-  )
+  );
 }
