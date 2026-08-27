@@ -3,7 +3,10 @@ const path = require("path");
 
 function extractPaths(value, acc = []) {
   if (typeof value === "string") {
-    if (/src[/\\]features[/\\]/.test(value) && /\.tsx?$/.test(value)) {
+    if (
+      /src[/\\](entities|features|pages|widgets)[/\\]/.test(value) &&
+      /\.tsx?$/.test(value)
+    ) {
       acc.push(value);
     }
     return acc;
@@ -34,10 +37,12 @@ function normalize(filePath) {
   return filePath.replace(/\\/g, "/");
 }
 
-function isFeatureUiComponent(filePath) {
+function isUiComponent(filePath) {
   const normalized = normalize(filePath);
   if (normalized.includes(".test.")) return false;
-  return /(?:^|\/)src\/features\/.+\/ui\/[^/]+\.tsx$/.test(normalized);
+  return /(?:^|\/)src\/(?:entities|features|pages|widgets)\/.+\/ui\/[^/]+\.tsx$/.test(
+    normalized,
+  );
 }
 
 function toTestPath(filePath) {
@@ -62,7 +67,7 @@ process.stdin.on("end", () => {
   const missing = [
     ...new Set(extractPaths(payload).map((item) => path.resolve(item))),
   ].filter((filePath) => {
-    if (!isFeatureUiComponent(filePath)) return false;
+    if (!isUiComponent(filePath)) return false;
     if (!fs.existsSync(filePath)) return false;
     return !fs.existsSync(toTestPath(filePath));
   });

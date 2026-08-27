@@ -78,3 +78,16 @@
 - **Сделано:** `reports/sessions.md`, `reports/hardening-plan.md`; ссылки в `REPORT.md`.
 - **Решение:** журнал вести в репозитории, не только в транскриптах IDE. Worktree создан, но последующие правки шли в основной checkout.
 - **Дальше:** коммит артефактов ДЗ; затем P0/P1 из плана усиления.
+
+## 8. P0 и P1: хуки и сдача
+
+- **Когда:** 14:46
+- **Чат:** этот (продолжение: «делай»)
+- **Цель:** закрыть P0 (коммит/пуш артефактов) и P1 (хуки на реальный UI, tsc/стили, журнал).
+- **Сделано:**
+  - `check-ui-tests.cjs` смотрит `src/{entities,features,pages,widgets}/**/ui/*.tsx`.
+  - `check-types-and-styles.cjs` на `postToolUse`: `ts-check` для `src/**/*.{ts,tsx}`, `lint:styles` для `src/**/*.css`, fail-open.
+  - `remind-session-journal.cjs` на `sessionStart`.
+  - Обновлены `hooks.json`, журнал и план.
+- **Решение:** не блокировать агента (`exit 0`); путь `src/components` из исходного задания не существует — матч по `src/`.
+- **Дальше:** P2 — Vitest/RTL и вынос `entities/invoice` в worktree.

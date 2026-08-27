@@ -1,10 +1,20 @@
 {
   "version": 1,
   "hooks": {
+    "sessionStart": [
+      {
+        "command": "node .cursor/hooks/remind-session-journal.cjs"
+      }
+    ],
     "postToolUse": [
       {
         "command": "node .cursor/hooks/check-ui-tests.cjs",
         "matcher": "Write|StrReplace"
+      },
+      {
+        "command": "node .cursor/hooks/check-types-and-styles.cjs",
+        "matcher": "Write|StrReplace",
+        "timeout": 90
       }
     ]
   }
