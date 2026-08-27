@@ -58,4 +58,10 @@ P0–P2 закрыты: журнал, хуки, `entities/invoice`, Vitest/RTL (
 
 **Добавлено 2026-08-27 (сессия 14):** полноценный `PayView` (таймер, paid/expired) и QR платёжной ссылки (`PaymentQr`, `qrcode.react`).
 
-Дальше — P3 по желанию: Playwright в репозитории, агент-ломатель, инъекции; «Выставить снова» для expired.
+**Добавлено 2026-08-27 (сессия 15, P3):**
+
+- Playwright в репозитории: `npm run test:e2e` (12 сценариев, POM в `e2e/pages/`), Vite слушает `127.0.0.1:5173`.
+- Workflow агент-ломатель: [`workflows/breaker.md`](workflows/breaker.md) → [`reports/breaker.md`](reports/breaker.md) (0 blocker).
+- Инъекции: `beforeSubmitPrompt` (`.cursor/hooks/inject-guardrails.cjs`) + правило `.cursor/rules/agent-guardrails.mdc`.
+
+Дальше — по желанию: «Выставить снова» для expired.

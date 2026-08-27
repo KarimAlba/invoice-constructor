@@ -1,0 +1,11 @@
+---
+description: Guardrails для агента — секреты и Git MCP
+alwaysApply: true
+---
+
+# Agent guardrails
+
+- **Секреты:** не коммить `.env`, ключи API, токены, приватные ключи. При подозрении — предупреди и убери из diff.
+- **Git:** локальный git — через GitLens MCP (`git_status`, `git_worktree`, `git_branch`, `git_log_or_diff`). Не запускай `git worktree` в shell, если MCP доступен (см. `.cursor/rules/git-mcp-worktrees.mdc`).
+- **GitKraken login:** нужен только для PR/issues из MCP; для локального git и worktree не обязателен.
+- **Журнал:** после содержательной сессии дописывать `reports/sessions.md`.

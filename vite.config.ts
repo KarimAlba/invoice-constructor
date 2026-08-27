@@ -3,8 +3,19 @@ import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
   plugins: [react()],
+  server: {
+    host: '127.0.0.1',
+    port: 5173,
+    strictPort: true,
+  },
+  preview: {
+    host: '127.0.0.1',
+    port: 4173,
+    strictPort: true,
+  },
   test: {
     environment: 'happy-dom',
     setupFiles: './vitest.setup.ts',
+    exclude: ['**/node_modules/**', '**/dist/**', 'e2e/**'],
   },
 });

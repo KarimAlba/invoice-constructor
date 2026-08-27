@@ -147,3 +147,16 @@
   - Обновлены `REPORT.md`, `reports/sessions.md`.
 - **Решение:** параллельные агенты с разделением файлов; `resolveStatus` экспортирован из public API entities; QR только для pending.
 - **Дальше:** коммит и push `main`; по желанию P3 (Playwright в репо, «Выставить снова»).
+
+## 15. P3 — Playwright, ломатель, инъекции
+
+- **Когда:** 2026-08-27, 16:33–16:40
+- **Цель:** закрыть плюсы ДЗ P3 без GitKraken login (PR не нужны).
+- **Сделано:**
+  - `@playwright/test`, `playwright.config.ts`, `e2e/ui-check.spec.ts`, `e2e/breaker.spec.ts`, POM `e2e/pages/constructor.page.ts`.
+  - Скрипты `npm run test:e2e`, `npm run test:e2e:ui`; Vite `host: 127.0.0.1`, `strictPort`; Vitest exclude `e2e/**`.
+  - Workflow [`workflows/breaker.md`](../workflows/breaker.md) → [`reports/breaker.md`](../reports/breaker.md) (12/12 e2e, 0 blocker).
+  - Инъекции: `beforeSubmitPrompt` → `.cursor/hooks/inject-guardrails.cjs`; правило `.cursor/rules/agent-guardrails.mdc`.
+  - Обновлены `REPORT.md`, `README.md`, `reports/hardening-plan.md`, `workflows/ui-check.md`.
+- **Решение:** e2e дублируют сценарии ui-check + breaker; guardrails fail-open (inject context, не блокируют промпт).
+- **Дальше:** опционально «Выставить снова» для expired; коммит P3-артефактов.

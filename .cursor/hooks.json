@@ -6,6 +6,12 @@
         "command": "node .cursor/hooks/remind-session-journal.cjs"
       }
     ],
+    "beforeSubmitPrompt": [
+      {
+        "command": "node .cursor/hooks/inject-guardrails.cjs",
+        "matcher": "UserPromptSubmit"
+      }
+    ],
     "postToolUse": [
       {
         "command": "node .cursor/hooks/check-ui-tests.cjs",

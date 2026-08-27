@@ -11,7 +11,7 @@ npm install
 npm run dev
 ```
 
-Сборка: `npm run build`. Превью: `npm run preview`. Тесты: `npm test`.
+Сборка: `npm run build`. Превью: `npm run preview`. Unit-тесты: `npm test`. E2E (Playwright): `npm run test:e2e`.
 
 ## Как пользоваться
 
@@ -24,4 +24,4 @@ npm run dev
 
 ## Workflow
 
-Повторяемая проверка UI: [`workflows/ui-check.md`](workflows/ui-check.md). Журнал сессий: [`reports/sessions.md`](reports/sessions.md). План усиления: [`reports/hardening-plan.md`](reports/hardening-plan.md).
+Повторяемая проверка UI: [`workflows/ui-check.md`](workflows/ui-check.md) (или `npm run test:e2e`). Агент-ломатель: [`workflows/breaker.md`](workflows/breaker.md). Журнал сессий: [`reports/sessions.md`](reports/sessions.md). План усиления: [`reports/hardening-plan.md`](reports/hardening-plan.md).
