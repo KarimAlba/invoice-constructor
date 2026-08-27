@@ -14,7 +14,7 @@
     "lint:fsd": "steiger ./src",
     "lint:fsd:fix": "steiger --fix ./src",
     "lint:prettier": "prettier --check \"**/*.{ts,tsx,css,json,md,yml,yaml}\"",
-    "lint:styles": "stylelint \"**/*.css\"",
+    "lint:styles": "stylelint \"src/**/*.css\"",
     "lint:styles:fix": "npm run lint:styles -- --fix",
     "pre-commit-lint": "lint-staged --quiet",
     "prepare": "husky",
