@@ -61,17 +61,21 @@ export function ConstructorPage() {
   const selected = items.find((item) => item.id === selectedId) ?? items[0] ?? null;
 
   return (
-    <div className={styles.page}>
+    <main className={styles.page}>
       <header className={styles.masthead}>
-        <p className={styles.brand}>Ledger slip</p>
-        <h1>Конструктор инвойса</h1>
-        <p>Один экран: выставить счёт, получить ссылку, следить за статусом.</p>
+        <div className={styles.mastheadCopy}>
+          <p className={styles.brand}>Ledger slip</p>
+          <h1>Конструктор инвойса</h1>
+        </div>
+        <p className={styles.mastheadIntro}>
+          Один экран: выставить счёт, получить ссылку, следить за статусом.
+        </p>
       </header>
       <div className={styles.layout}>
         <InvoiceForm onCreated={handleCreated} />
         <div className={styles.side}>
           {selected ? (
-            <p className={styles.hint}>
+            <p className={styles.hint} aria-live='polite'>
               Последний фокус: <strong>INV-{selected.id.toUpperCase()}</strong>
             </p>
           ) : null}
@@ -84,6 +88,6 @@ export function ConstructorPage() {
           />
         </div>
       </div>
-    </div>
+    </main>
   );
 }

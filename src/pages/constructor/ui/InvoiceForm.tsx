@@ -61,7 +61,7 @@ export function InvoiceForm({ onCreated }: InvoiceFormProps) {
   }
 
   return (
-    <form className={styles.form} onSubmit={handleSubmit} noValidate>
+    <form className={styles.form} onSubmit={handleSubmit} aria-busy={busy} noValidate>
       <header className={styles.formHead}>
         <p className={styles.kicker}>Новый счёт</p>
         <h2>Собрать инвойс</h2>
@@ -74,6 +74,7 @@ export function InvoiceForm({ onCreated }: InvoiceFormProps) {
         <span>Сумма</span>
         <div className={styles.amountRow}>
           <input
+            className={styles.control}
             inputMode='decimal'
             autoComplete='off'
             name='amount'
@@ -84,8 +85,10 @@ export function InvoiceForm({ onCreated }: InvoiceFormProps) {
               setAmount(event.target.value);
             }}
             aria-invalid={Boolean(error)}
+            aria-describedby={error ? 'amount-error' : undefined}
           />
           <select
+            className={styles.control}
             name='currency'
             value={currency}
             onChange={(event) => {
@@ -105,6 +108,7 @@ export function InvoiceForm({ onCreated }: InvoiceFormProps) {
       <label className={styles.field}>
         <span>Описание</span>
         <textarea
+          className={styles.control}
           name='description'
           rows={3}
           maxLength={280}
@@ -139,12 +143,12 @@ export function InvoiceForm({ onCreated }: InvoiceFormProps) {
       </fieldset>
 
       {error ? (
-        <p className={styles.error} role='alert'>
+        <p id='amount-error' className={styles.error} role='alert'>
           {error}
         </p>
       ) : null}
 
-      <button className={styles.submit} type='submit' disabled={!canSubmit}>
+      <button className={`${styles.button} ${styles.submit}`} type='submit' disabled={!canSubmit}>
         {busy ? 'Создаём…' : 'Выставить счёт'}
       </button>
     </form>

@@ -44,9 +44,9 @@ function InvoiceListComponent({ items, filter, onFilter, onChange, onTick }: Inv
   }, [onTick]);
 
   return (
-    <section className={styles.list}>
+    <section className={styles.list} aria-labelledby='invoices-heading'>
       <div className={styles.listHead}>
-        <h2>Выставленные</h2>
+        <h2 id='invoices-heading'>Выставленные</h2>
         <div className={styles.filters} role='tablist' aria-label='Фильтр по статусу'>
           {FILTERS.map((value) => (
             <button
@@ -54,6 +54,7 @@ function InvoiceListComponent({ items, filter, onFilter, onChange, onTick }: Inv
               type='button'
               role='tab'
               aria-selected={filter === value}
+              aria-controls='invoice-results'
               className={filter === value ? styles.filterActive : styles.filter}
               onClick={() => onFilter(value)}
             >
@@ -62,15 +63,17 @@ function InvoiceListComponent({ items, filter, onFilter, onChange, onTick }: Inv
           ))}
         </div>
       </div>
-      {visible.length === 0 ? (
-        <p className={styles.empty}>Пока пусто — соберите первый счёт слева.</p>
-      ) : (
-        <div className={styles.stack}>
-          {visible.map((item) => (
-            <InvoiceCard key={item.id} invoice={item} now={now} onChange={onChange} />
-          ))}
-        </div>
-      )}
+      <div id='invoice-results' role='tabpanel' aria-live='polite'>
+        {visible.length === 0 ? (
+          <p className={styles.empty}>Пока пусто — соберите первый счёт слева.</p>
+        ) : (
+          <div className={styles.stack}>
+            {visible.map((item) => (
+              <InvoiceCard key={item.id} invoice={item} now={now} onChange={onChange} />
+            ))}
+          </div>
+        )}
+      </div>
     </section>
   );
 }

@@ -1,4 +1,5 @@
 export { formatAmount, formatCountdown, paymentUrl, statusLabel } from './lib/format';
+export { resolveStatus } from './lib/status';
 export { createInvoice, getInvoice, listInvoices, markInvoicePaid } from './model/repository';
 export {
   type CreateInvoiceInput,
@@ -9,3 +10,4 @@ export {
   STATUSES,
   TTL_OPTIONS,
 } from './model/types';
+export { PaymentQr } from './ui/PaymentQr';

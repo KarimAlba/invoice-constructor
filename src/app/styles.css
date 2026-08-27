@@ -1,14 +1,52 @@
 :root {
-  --ink: #1c1712;
-  --cream: #f3ead7;
-  --paper: #f7edd8;
-  --desk: #14110e;
-  --muted: #b8aa94;
-  --copper: #c45c26;
+  --color-ink: #211a14;
+  --color-ink-soft: #5d5146;
+  --color-cream: #f2e8d2;
+  --color-paper: #f6ecd6;
+  --color-paper-raised: #fff9ec;
+  --color-paper-muted: #e9dcc2;
+  --color-desk: #100e0c;
+  --color-desk-raised: #1c1814;
+  --color-muted: #b9aa92;
+  --color-copper: #d36a32;
+  --color-copper-dark: #93411d;
+  --color-paid: #2f6c49;
+  --color-expired: #74685d;
+  --color-danger: #9b2f24;
+  --color-focus: #f0a16d;
+  --ink: var(--color-ink);
+  --cream: var(--color-cream);
+  --paper: var(--color-paper);
+  --desk: var(--color-desk);
+  --muted: var(--color-muted);
+  --copper: var(--color-copper);
   --display: 'Fraunces', 'Times New Roman', serif;
   --sans: 'Outfit', 'Segoe UI', sans-serif;
   --mono: 'IBM Plex Mono', ui-monospace, monospace;
+  --text-xs: 0.6875rem;
+  --text-sm: 0.8125rem;
+  --text-base: 1rem;
+  --text-lg: 1.125rem;
+  --text-display: clamp(3rem, 7vw, 6.75rem);
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+  --space-8: 5rem;
+  --radius-control: 0.125rem;
+  --radius-paper: 0.25rem 0.25rem 1.5rem 0.25rem;
+  --border-paper: 1px solid rgb(80 58 38 / 16%);
+  --shadow-paper:
+    0 1px 0 rgb(255 252 240 / 72%) inset, 0 2px 0 rgb(73 43 22 / 14%), 0 28px 70px rgb(0 0 0 / 42%);
+  --focus-ring: 0 0 0 3px color-mix(in srgb, var(--color-focus) 46%, transparent);
+  --motion-fast: 150ms;
+  --motion-base: 260ms;
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
 
+  color-scheme: dark;
   font: 16px/1.45 var(--sans);
   color: var(--cream);
   background: var(--desk);
@@ -30,8 +68,16 @@ body,
 body {
   margin: 0;
   background:
-    radial-gradient(1200px 600px at 10% -10%, #2a2118 0%, transparent 55%),
-    radial-gradient(900px 500px at 110% 10%, #3a2416 0%, transparent 50%), var(--desk);
+    linear-gradient(rgb(255 255 255 / 1%) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(255 255 255 / 1%) 1px, transparent 1px),
+    radial-gradient(1100px 680px at 8% -10%, #352519 0%, transparent 58%),
+    radial-gradient(900px 580px at 105% 8%, #492718 0%, transparent 52%), var(--desk);
+  background-size:
+    32px 32px,
+    32px 32px,
+    auto,
+    auto,
+    auto;
 }
 
 body::before {
@@ -39,14 +85,43 @@ body::before {
   position: fixed;
   inset: 0;
   pointer-events: none;
-  opacity: 0.18;
+  z-index: 2;
+  opacity: 0.12;
+  mix-blend-mode: soft-light;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.55'/%3E%3C/svg%3E");
 }
 
 #root {
   position: relative;
+  isolation: isolate;
 }
 
 a {
   color: inherit;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+::selection {
+  color: var(--color-paper-raised);
+  background: var(--color-copper-dark);
+}
+
+@media (width <= 640px) {
+  :root {
+    --space-7: 2.25rem;
+    --space-8: 3.5rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --motion-fast: 0ms;
+    --motion-base: 0ms;
+  }
 }

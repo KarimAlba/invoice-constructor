@@ -5,6 +5,7 @@ import {
   formatCountdown,
   type Invoice,
   markInvoicePaid,
+  PaymentQr,
   paymentUrl,
   statusLabel,
 } from '../../../entities/invoice';
@@ -54,10 +55,16 @@ function InvoiceCardComponent({ invoice, now, onChange }: InvoiceCardProps) {
   }
 
   return (
-    <article className={styles.receipt} data-status={invoice.status}>
+    <article
+      className={styles.receipt}
+      data-status={invoice.status}
+      aria-labelledby={`invoice-${invoice.id}`}
+    >
       <div className={styles.receiptTop}>
         <span className={styles.stamp}>{statusLabel(invoice.status)}</span>
-        <span className={styles.serial}>INV-{invoice.id.toUpperCase()}</span>
+        <span id={`invoice-${invoice.id}`} className={styles.serial}>
+          INV-{invoice.id.toUpperCase()}
+        </span>
       </div>
       <p className={styles.receiptAmount}>{formatAmount(invoice.amount, invoice.currency)}</p>
       <p className={styles.receiptDesc}>{invoice.description || 'Без описания'}</p>
@@ -77,12 +84,23 @@ function InvoiceCardComponent({ invoice, now, onChange }: InvoiceCardProps) {
           </dd>
         </div>
       </dl>
+      {invoice.status === 'pending' ? (
+        <div className={styles.qrBlock}>
+          <PaymentQr invoiceId={invoice.id} />
+          <p className={styles.qrCaption}>QR для открытия на этом устройстве</p>
+        </div>
+      ) : null}
       <div className={styles.receiptActions}>
-        <button type='button' onClick={() => void copyLink()}>
+        <button
+          className={`${styles.button} ${styles.copy}`}
+          type='button'
+          onClick={() => void copyLink()}
+          aria-live='polite'
+        >
           {copied ? 'Скопировано' : 'Копировать ссылку'}
         </button>
         {invoice.status === 'pending' ? (
-          <button type='button' className={styles.ghost} onClick={pay}>
+          <button type='button' className={`${styles.button} ${styles.ghost}`} onClick={pay}>
             Отметить оплаченным
           </button>
         ) : null}
